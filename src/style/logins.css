@@ -1,0 +1,100 @@
+.loginContainer {
+    height: 100vh;
+    width: 100%;
+
+    background-color: #f1f1f1;
+
+}
+
+
+.loginBox {
+    position: absolute;
+    width: 300px;
+    padding: 20px 20px 20px 20px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(10px);
+
+    border-top: 1px solid rgba(206, 206, 206, 0.4);
+    border-left: 1px solid rgba(206, 206, 206, 0.4);
+
+    border-right: 1px solid rgba(255, 255, 255, 0.055);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+
+    box-shadow: 5px 15px 25px rgba(0, 0, 0, 0.1);
+
+
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.loginBox h2 {
+    margin: 0 0 30px 0;
+
+}
+
+.loginBox input {
+    width: calc(100% - 20px);
+    outline: none;
+    border: none;
+    padding: 5px 10px 5px 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+
+    font-weight: 500;
+    border-radius: 5px;
+}
+
+.inputBox {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.inputBox p {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.loginBox button {
+    margin-top: 40px;
+    padding: 5px 20px 5px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+
+    letter-spacing: 2px;
+    font-weight: 600;
+
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+    background-color: white;
+    transition: background-color .5s ease;
+}
+
+.loginBox button:hover {
+    background-color: rgba(172, 255, 47, 0.5);
+    transition: background-color .5s ease;
+}
+
+.createAccount {
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.createAccount span {
+    color: tomato;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 99, 71, 0);
+    transition: all .5s ease;
+}
+
+.createAccount span:hover {
+    border-bottom: 1px solid tomato;
+    transition: all .5s ease;
+}
