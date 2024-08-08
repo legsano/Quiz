@@ -9,22 +9,12 @@ const Question = ({ data, currentQuestionIndex, setCurrentQuestionIndex, answers
     const labels = ['A', 'B', 'C', 'D'];
 
     useEffect(() => {
-        const shuffledStatus = localStorage.getItem('shuffledStatus');
+        // Menetapkan jawaban mengacak jika belum diacak
+        const shuffledAnswers = [correct_answer, ...incorrect_answers].sort(() => Math.random() - 0.4657);
+        setAnswers(shuffledAnswers);
 
-        if (shuffledStatus !== 'true') {
-            // Menetapkan jawaban mengacak jika belum diacak
-            const shuffledAnswers = [correct_answer, ...incorrect_answers].sort(() => Math.random() - 0.4657);
-            setAnswers(shuffledAnswers);
-
-            // Simpan status pengacakan di localStorage
-            localStorage.setItem('shuffledStatus', 'true');
-        } else {
-            // Ambil jawaban yang tidak diacak
-            setAnswers([correct_answer, ...incorrect_answers]);
-        }
-
-        // Hapus status pengacakan jika diperlukan pada saat navigasi keluar dari komponen
-        return () => localStorage.removeItem('shuffledStatus');
+        // Ambil jawaban yang tidak diacak
+        // setAnswers([correct_answer, ...incorrect_answers]);
 
     }, [data, currentQuestionIndex]);
 

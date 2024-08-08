@@ -3,6 +3,7 @@ import Question from '../components/Question';
 import { useNavigate } from 'react-router-dom';
 import '../style/quiz.css';
 import Navbar from '../components/Navbar';
+import WarningBox from '../components/WarningBox';
 
 // import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -23,9 +24,27 @@ export default function Quiz() {
     const [answersHistory, setAnswersHistory] = useState(Array(amountquestion).fill(null));
     const [isNavVisible, setIsNavVisible] = useState(false);
     const [quizFinished, setQuizFinished] = useState(false);
-
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 400); // Set default based on initial width
+    const [isWarnBoxVisible, setWarnBoxVisible] = useState(false);
 
     const amount = amountquestion;
+
+
+
+    useEffect(() => {
+        // Function to handle window resize
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth <= 400); // Update state based on window width
+        };
+
+        // Add event listener
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup event listener on unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         document.title = 'Quiz';
@@ -91,7 +110,47 @@ export default function Quiz() {
         }
     }, [questions, timeLeft, quizFinished]);
 
+    useEffect(() => {
+        const answeredCount = answersHistory.filter(answer => answer !== null).length;
+        localStorage.setItem('quizAnswered', answeredCount);
+    }, [answersHistory]);
+
+
+    function toggleWarnBox() {
+        setWarnBoxVisible(!isWarnBoxVisible)
+    }
+
+    function onConfirm() {
+        setWarnBoxVisible(!isWarnBoxVisible)
+        handleFinishQuiz();
+    }
+
+    function getCurrentDateTime() {
+        const now = new Date(); // Create a new Date object with the current date and time
+
+        // Extract date and time components
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const day = now.getDate();
+        const month = now.getMonth() + 1; // Months are zero-based, so add 1
+        const year = now.getFullYear();
+
+        // Format time and date as strings
+        const formattedTime = `${hours.toString().padStart(2, '0')} : ${minutes.toString().padStart(2, '0')}`;
+        const formattedDate = `${day.toString().padStart(2, '0')} - ${month.toString().padStart(2, '0')} - ${year}`;
+
+        return {
+            time: formattedTime,
+            date: formattedDate
+        };
+    }
+
     const handleFinishQuiz = () => {
+        const currentDateTime = getCurrentDateTime();
+
+        localStorage.setItem('quizTime', currentDateTime.time);
+        localStorage.setItem('quizDate', currentDateTime.date);
+
         localStorage.setItem('score', score);
         localStorage.setItem('amountquestion', amountquestion);
         localStorage.removeItem('question');
@@ -139,13 +198,22 @@ export default function Quiz() {
 
     return (
         <div className='quizContainer'>
-            <Navbar username={savedUsername} disableLogout={true} />
+            <Navbar username={savedUsername} disableLogout={true} disableResult={true} />
+            <WarningBox isWarnBoxVisible={isWarnBoxVisible} toggleWarnBox={toggleWarnBox} onConfirm={onConfirm} />
 
             <div className='quizBox' onClick={test}>
                 <div className='questionContainer'>
                     <div className='questionIndex'>
-                        <p>Question : {currentQuestionIndex + 1} of {amount}</p>
-                        <p>Time : {formatTime(timeLeft)}</p>
+                        <p>
+                            {isMobileView ?
+                                `Q : ${currentQuestionIndex + 1} of ${amount}` :
+                                `Question : ${currentQuestionIndex + 1} of ${amount}`}
+                        </p>
+                        <p>
+                            {isMobileView ?
+                                `T: ${formatTime(timeLeft)}` :
+                                `Time : ${formatTime(timeLeft)}`}
+                        </p>
                     </div>
 
                     {questions.length > 0 ? (
@@ -161,6 +229,10 @@ export default function Quiz() {
                     ) : (
                         <p>Loading questions...</p>
                     )}
+
+                    <div className="quizInstruction">
+                        <p>- Select the correct answer by clicking on it -</p>
+                    </div>
 
                 </div>
 
@@ -185,7 +257,7 @@ export default function Quiz() {
 
                         <div className="buttonNP">
                             <button onClick={() => setCurrentQuestionIndex(prevIndex => Math.max(prevIndex - 1, 0))} disabled={currentQuestionIndex === 0}>Prev</button>
-                            <button onClick={currentQuestionIndex === amount - 1 ? handleFinishQuiz : () => setCurrentQuestionIndex(prevIndex => Math.min(prevIndex + 1, amount - 1))}>
+                            <button onClick={currentQuestionIndex === amount - 1 ? toggleWarnBox : () => setCurrentQuestionIndex(prevIndex => Math.min(prevIndex + 1, amount - 1))}>
                                 {currentQuestionIndex === amount - 1 ? 'Finish' : 'Next'}
                             </button>
                         </div>

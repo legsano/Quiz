@@ -46,7 +46,12 @@
     font-weight: 400;
 }
 
+.quizInstruction {
+    text-align: center;
+    color: gray;
 
+    font-size: 13px;
+}
 
 .quizNavCont {
     width: 25%;
@@ -209,12 +214,14 @@
     transition: transform 1s ease, opacity .5s ease;
 }
 
-
-
 .quizNavMob span {
     color: white;
     font-weight: 550;
 }
+
+
+
+
 
 @media (min-width: 900px) {
     .quizNavMob {

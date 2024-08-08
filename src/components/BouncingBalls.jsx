@@ -8,7 +8,7 @@ function Ball({ id }) {
 export default function BouncingBalls() {
 
     const containerRef = useRef(null);
-    const balls = Array.from({ length: 8 }, (_, i) => i);
+    const balls = Array.from({ length: 7 }, (_, i) => i);
 
     useEffect(() => {
         const container = containerRef.current;

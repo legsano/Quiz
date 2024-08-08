@@ -36,10 +36,13 @@ export default function Dashboard() {
         localStorage.setItem('time', time);
         localStorage.setItem('quizInProgress', 'true');
         localStorage.setItem('title', title);
+        // localStorage.setItem('shuffledStatus', '1');
 
         localStorage.removeItem('amountquestion');
         localStorage.removeItem('score');
-        localStorage.removeItem('title');
+        // localStorage.removeItem('title');
+
+        console.log('Shuffled Status Dshbrd:', localStorage.getItem('shuffledStatus'));
 
         // Fetch questions and navigate
         try {
